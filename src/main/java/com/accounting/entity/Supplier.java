@@ -7,11 +7,17 @@ import lombok.Data;
 
 /**
  * 供应商实体类
+ * 
+ * @author Accounting Platform
+ * @version 1.0.0
  */
 @Data
 @TableName("supplier")
 public class Supplier {
 
+    /**
+     * 主键ID
+     */
     @TableId(type = IdType.AUTO)
     private Long id;
 

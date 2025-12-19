@@ -10,11 +10,17 @@ import java.time.LocalDateTime;
 
 /**
  * 采购订单实体类
+ * 
+ * @author Accounting Platform
+ * @version 1.0.0
  */
 @Data
 @TableName("purchase_order")
 public class PurchaseOrder {
 
+    /**
+     * 主键ID
+     */
     @TableId(type = IdType.AUTO)
     private Long id;
 
@@ -43,5 +49,8 @@ public class PurchaseOrder {
      */
     private Integer status;
 
+    /**
+     * 备注
+     */
     private String remark;
 }

@@ -7,15 +7,37 @@ import lombok.Data;
 
 /**
  * 员工实体类
+ * 
+ * @author Accounting Platform
+ * @version 1.0.0
  */
 @Data
+@TableName("employee")
 public class Employee {
 
+    /**
+     * 主键ID
+     */
     @TableId(value = "id", type = IdType.AUTO)
     private Long id;
 
+    /**
+     * 员工编码
+     */
     private String employeeCode;
+    
+    /**
+     * 员工姓名
+     */
     private String employeeName;
+    
+    /**
+     * 电话
+     */
     private String phone;
-    private Integer status; // 0:禁用 1:启用
+    
+    /**
+     * 状态（0:禁用 1:启用）
+     */
+    private Integer status;
 }

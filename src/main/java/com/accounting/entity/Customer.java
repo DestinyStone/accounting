@@ -7,6 +7,9 @@ import lombok.Data;
 
 /**
  * 客户实体类
+ * 
+ * @author Accounting Platform
+ * @version 1.0.0
  */
 @Data
 @TableName("customer")
@@ -17,7 +20,6 @@ public class Customer {
      */
     @TableId(type = IdType.AUTO)
     private Long id;
-
 
     /**
      * 客户编码

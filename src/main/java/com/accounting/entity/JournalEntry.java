@@ -11,21 +11,60 @@ import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
+/**
+ * 凭证分录实体类
+ * 
+ * @author Accounting Platform
+ * @version 1.0.0
+ */
 @Data
 @TableName("journal_entry")
 public class JournalEntry {
+    /**
+     * 主键ID
+     */
     @TableId(type = IdType.AUTO)
     private Long id;
+    
+    /**
+     * 凭证号
+     */
     private String voucherNo;
 
+    /**
+     * 凭证日期
+     */
     @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
     private Date voucherDate;
+    
+    /**
+     * 摘要
+     */
     private String summary;
+    
+    /**
+     * 借方总额
+     */
     private BigDecimal totalDebit;
+    
+    /**
+     * 贷方总额
+     */
     private BigDecimal totalCredit;
+    
+    /**
+     * 状态（0-草稿，1-已审核，2-已过账）
+     */
     private Integer status;
+    
+    /**
+     * 创建时间
+     */
     private Date createTime;
 
+    /**
+     * 凭证明细列表（非数据库字段）
+     */
     @TableField(exist = false)
     private List<JournalEntryDetail> details;
 }

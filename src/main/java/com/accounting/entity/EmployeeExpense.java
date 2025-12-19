@@ -9,23 +9,47 @@ import lombok.Data;
 
 /**
  * 员工费用报销实体类
+ * 
+ * @author Accounting Platform
+ * @version 1.0.0
  */
 @Data
 @TableName("employee_expense")
 public class EmployeeExpense {
 
+    /**
+     * 主键ID
+     */
     @TableId(type = IdType.AUTO)
     private Long id;
 
-    private String expenseNo; // 费用编号
+    /**
+     * 费用编号
+     */
+    private String expenseNo;
 
-    private Long employeeId; // 员工ID
+    /**
+     * 员工ID
+     */
+    private Long employeeId;
 
-    private BigDecimal amount; // 费用金额
+    /**
+     * 费用金额
+     */
+    private BigDecimal amount;
 
-    private String remark; // 费用描述
+    /**
+     * 费用描述
+     */
+    private String remark;
 
-    private Integer status; // 状态：0-待审批，1-已批准，2-已报销
+    /**
+     * 状态：0-待审批，1-已批准，2-已报销
+     */
+    private Integer status;
 
-    private Date expenseDate; // 费用发生日期
+    /**
+     * 费用发生日期
+     */
+    private Date expenseDate;
 }

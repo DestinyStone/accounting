@@ -9,6 +9,9 @@ import java.util.Date;
 
 /**
  * 销售订单实体类
+ * 
+ * @author Accounting Platform
+ * @version 1.0.0
  */
 @Data
 @TableName("sales_order")
@@ -45,5 +48,8 @@ public class SalesOrder {
      */
     private Integer status;
 
+    /**
+     * 备注
+     */
     private String remark;
 }

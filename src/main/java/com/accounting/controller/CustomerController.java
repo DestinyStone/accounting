@@ -15,19 +15,37 @@ import java.util.Map;
 
 /**
  * 客户控制器
+ * 处理客户相关的CRUD操作
+ * 
+ * @author Accounting Platform
+ * @version 1.0.0
  */
 @RestController
 @RequestMapping(Api.path + "/customer")
 public class CustomerController {
 
+    /**
+     * 客户服务
+     */
     @Autowired
     private CustomerService customerService;
 
+    /**
+     * JSON对象映射器
+     */
     @Autowired
     private ObjectMapper objectMapper;
 
     /**
      * 分页查询客户列表
+     * 
+     * @param pageNum 页码，默认为1
+     * @param pageSize 每页大小，默认为10
+     * @param companyId 公司ID（必填）
+     * @param customerCode 客户编码（可选）
+     * @param customerName 客户名称（可选）
+     * @param status 状态（可选）
+     * @return 分页结果
      */
     @GetMapping("/page")
     public Result<IPage<Customer>> page(
@@ -47,6 +65,9 @@ public class CustomerController {
 
     /**
      * 根据ID查询客户
+     * 
+     * @param id 客户ID
+     * @return 客户对象
      */
     @GetMapping("/getById/{id}")
     public Result<Customer> getById(@PathVariable Long id) {
@@ -64,6 +85,9 @@ public class CustomerController {
 
     /**
      * 新增客户
+     * 
+     * @param customer 客户对象
+     * @return 操作结果
      */
     @PostMapping("/insert")
     public Result insert(@RequestBody Customer customer) {
@@ -81,6 +105,9 @@ public class CustomerController {
 
     /**
      * 更新客户
+     * 
+     * @param customer 客户对象
+     * @return 操作结果
      */
     @PostMapping("/update")
     public Result update(@RequestBody Customer customer) {
@@ -98,6 +125,9 @@ public class CustomerController {
 
     /**
      * 删除客户
+     * 
+     * @param id 客户ID
+     * @return 操作结果
      */
     @PostMapping("/delete/{id}")
     public Result delete(@PathVariable Long id) {
@@ -115,6 +145,9 @@ public class CustomerController {
 
     /**
      * 批量删除客户
+     * 
+     * @param ids 客户ID列表
+     * @return 操作结果
      */
     @PostMapping("/deleteBatch")
     public Result deleteBatch(@RequestBody List<Long> ids) {
@@ -132,6 +165,10 @@ public class CustomerController {
 
     /**
      * 根据客户编码查询
+     * 
+     * @param customerCode 客户编码
+     * @param companyId 公司ID
+     * @return 客户对象
      */
     @GetMapping("/getByCode")
     public Result<Customer> getByCode(String customerCode, Long companyId) {
@@ -145,6 +182,9 @@ public class CustomerController {
 
     /**
      * 根据公司ID查询启用的客户列表
+     * 
+     * @param companyId 公司ID
+     * @return 客户列表
      */
     @GetMapping("/list")
     public Result<List<Customer>> list(Long companyId) {
@@ -158,6 +198,11 @@ public class CustomerController {
 
     /**
      * 检查客户名称是否重复
+     * 
+     * @param customerName 客户名称
+     * @param companyId 公司ID
+     * @param id 客户ID（更新时传入，新增时可为null）
+     * @return 是否重复（true-重复，false-不重复）
      */
     @GetMapping("/checkNameDuplicate")
     public Result<Boolean> checkNameDuplicate(String customerName, Long companyId, Long id) {
@@ -171,6 +216,9 @@ public class CustomerController {
 
     /**
      * 生成客户编码
+     * 
+     * @param companyId 公司ID
+     * @return 生成的客户编码
      */
     @GetMapping("/generateCode")
     public Result<String> generateCode(Long companyId) {

@@ -9,18 +9,33 @@ import java.math.BigDecimal;
 
 /**
  * 企业信息实体类
+ * 
+ * @author Accounting Platform
+ * @version 1.0.0
  */
 @Data
 @TableName("enterprise")
 public class Enterprise {
 
+    /**
+     * 主键ID
+     */
     @TableId(type = IdType.AUTO)
     private Long id;
     
-    private String name;  // 企业名称
+    /**
+     * 企业名称
+     */
+    private String name;
     
+    /**
+     * 注册资本
+     */
     @TableField("registration_capital")
-    private BigDecimal registrationCapital;  // 注册资本
+    private BigDecimal registrationCapital;
     
-    private String address;  // 企业地址
+    /**
+     * 企业地址
+     */
+    private String address;
 }
