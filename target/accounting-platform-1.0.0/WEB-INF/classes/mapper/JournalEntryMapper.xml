@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.accounting.mapper.JournalEntryMapper">
+
+    <resultMap id="JournalEntryWithDetailsResultMap" type="com.accounting.entity.JournalEntry">
+        <id column="id" property="id"/>
+        <result column="voucher_no" property="voucherNo"/>
+        <result column="voucher_date" property="voucherDate"/>
+        <result column="summary" property="summary"/>
+        <result column="total_debit" property="totalDebit"/>
+        <result column="total_credit" property="totalCredit"/>
+        <result column="status" property="status"/>
+        <result column="create_time" property="createTime"/>
+        <collection property="details" ofType="com.accounting.entity.JournalEntryDetail">
+            <id column="detail_id" property="id"/>
+            <result column="entry_id" property="entryId"/>
+            <result column="subject_id" property="subjectId"/>
+            <result column="debit_amount" property="debitAmount"/>
+            <result column="credit_amount" property="creditAmount"/>
+            <result column="remark" property="remark"/>
+        </collection>
+    </resultMap>
+
+    <select id="selectWithDetails" resultMap="JournalEntryWithDetailsResultMap">
+        SELECT je.*, jed.id as detail_id, jed.subject_id, jed.debit_amount, jed.credit_amount, jed.remark
+        FROM journal_entry je
+        LEFT JOIN journal_entry_detail jed ON je.id = jed.entry_id
+        <where>
+            <if test="params.voucherNo != null and params.voucherNo != ''">
+                AND je.voucher_no LIKE CONCAT('%', #{params.voucherNo}, '%')
+            </if>
+            <if test="params.status != null">
+                AND je.status = #{params.status}
+            </if>
+        </where>
+        ORDER BY je.voucher_date DESC, je.voucher_no DESC
+    </select>
+
+    <select id="selectByIdWithDetails" resultMap="JournalEntryWithDetailsResultMap">
+        SELECT je.*, jed.id as detail_id, jed.subject_id, jed.debit_amount, jed.credit_amount, jed.remark
+        FROM journal_entry je
+        LEFT JOIN journal_entry_detail jed ON je.id = jed.entry_id
+        WHERE je.id = #{id}
+    </select>
+
+    <update id="updateStatus">
+        UPDATE journal_entry SET status = #{status} WHERE id = #{id}
+    </update>
+
+    <select id="getMaxVoucherNoByDate" resultType="string">
+        SELECT MAX(voucher_no) FROM journal_entry
+        WHERE DATE_FORMAT(voucher_date, '%Y-%m-%d') = #{date}
+    </select>
+</mapper>
