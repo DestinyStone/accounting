@@ -147,4 +147,61 @@ public class AccountingSubjectController {
             return Result.error("获取末级科目失败：" + e.getMessage());
         }
     }
+
+    /**
+     * 绑定科目到业务类型
+     * 
+     * @param id 科目ID
+     * @param businessType 业务类型（PURCHASE-采购单，SALES-销售单，EXPENSE-员工费用，TAX-税务处理）
+     * @return 操作结果
+     */
+    @PostMapping("/bind/{id}")
+    public Result<Boolean> bindBusinessType(@PathVariable Long id, @RequestParam String businessType) {
+        try {
+            boolean success = accountingSubjectService.bindBusinessType(id, businessType);
+            if (success) {
+                return Result.success(true);
+            } else {
+                return Result.error("绑定失败");
+            }
+        } catch (Exception e) {
+            return Result.error("绑定失败：" + e.getMessage());
+        }
+    }
+
+    /**
+     * 取消科目绑定
+     * 
+     * @param id 科目ID
+     * @return 操作结果
+     */
+    @PostMapping("/unbind/{id}")
+    public Result<Boolean> unbindBusinessType(@PathVariable Long id) {
+        try {
+            boolean success = accountingSubjectService.unbindBusinessType(id);
+            if (success) {
+                return Result.success(true);
+            } else {
+                return Result.error("取消绑定失败");
+            }
+        } catch (Exception e) {
+            return Result.error("取消绑定失败：" + e.getMessage());
+        }
+    }
+
+    /**
+     * 根据业务类型获取绑定的科目
+     * 
+     * @param businessType 业务类型
+     * @return 绑定的科目
+     */
+    @GetMapping("/getByBusinessType/{businessType}")
+    public Result<AccountingSubject> getByBusinessType(@PathVariable String businessType) {
+        try {
+            AccountingSubject subject = accountingSubjectService.getByBusinessType(businessType);
+            return Result.success(subject);
+        } catch (Exception e) {
+            return Result.error("获取绑定科目失败：" + e.getMessage());
+        }
+    }
 }

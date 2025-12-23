@@ -53,7 +53,7 @@ public class JournalEntry {
     private BigDecimal totalCredit;
     
     /**
-     * 状态（0-草稿，1-已审核，2-已过账）
+     * 状态（0-未过账，1-已过账）
      */
     private Integer status;
     
@@ -61,6 +61,21 @@ public class JournalEntry {
      * 创建时间
      */
     private Date createTime;
+    
+    /**
+     * 业务来源类型（PURCHASE-采购订单，SALES-销售订单，SALARY-工资发放，EXPENSE-费用报销，TAX-税务）
+     */
+    private String businessType;
+    
+    /**
+     * 业务来源ID（关联的业务单据ID）
+     */
+    private Long businessId;
+    
+    /**
+     * 创建人ID
+     */
+    private Long createUserId;
 
     /**
      * 凭证明细列表（非数据库字段）

@@ -25,9 +25,9 @@ public class Reconciliation {
     private Long id;
     
     /**
-     * 账户ID
+     * 账户ID（会计科目ID）
      */
-    private String accountId;
+    private Long accountId;
     
     /**
      * 对账日期
@@ -36,17 +36,38 @@ public class Reconciliation {
     private Date reconciliationDate;
     
     /**
-     * 期初余额
+     * 账面余额（系统根据已过账凭证计算的余额）
      */
-    private BigDecimal startBalance;
+    private BigDecimal bookBalance;
     
     /**
-     * 期末余额
+     * 对账单余额（人工录入的外部对账单余额，如银行对账单）
      */
-    private BigDecimal endBalance;
+    private BigDecimal statementBalance;
+    
+    /**
+     * 差额 = 对账单余额 - 账面余额
+     */
+    private BigDecimal difference;
     
     /**
      * 状态（0-未对账，1-已对账）
      */
     private Integer status;
+    
+    /**
+     * 对账说明
+     */
+    private String remark;
+    
+    /**
+     * 对账人ID
+     */
+    private Long userId;
+    
+    /**
+     * 创建时间
+     */
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+    private Date createdAt;
 }

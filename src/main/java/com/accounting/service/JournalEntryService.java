@@ -60,4 +60,12 @@ public interface JournalEntryService extends IService<JournalEntry> {
      * @return 生成的凭证号
      */
     String generateVoucherNo(String date);
+    
+    /**
+     * 获取凭证明细（包含科目信息）
+     * 
+     * @param entryId 凭证ID
+     * @return 明细列表（包含科目编码和科目名称）
+     */
+    List<Map<String, Object>> getDetailsWithSubject(Long entryId);
 }

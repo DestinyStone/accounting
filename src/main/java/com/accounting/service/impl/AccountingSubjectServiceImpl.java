@@ -61,4 +61,40 @@ public class AccountingSubjectServiceImpl extends ServiceImpl<AccountingSubjectM
     public List<AccountingSubject> getEnabledLeafSubjects() {
         return accountingSubjectMapper.selectEnabledLeafSubjects();
     }
+
+    @Override
+    public boolean bindBusinessType(Long id, String businessType) {
+        // 检查是否已有其他科目绑定到该业务类型
+        AccountingSubject existingSubject = getByBusinessType(businessType);
+        if (existingSubject != null && !existingSubject.getId().equals(id)) {
+            throw new RuntimeException("该业务类型已绑定到科目：" + existingSubject.getCode() + "-" + existingSubject.getName());
+        }
+        
+        // 更新科目绑定
+        AccountingSubject subject = getById(id);
+        if (subject != null) {
+            subject.setBusinessType(businessType);
+            return updateById(subject);
+        }
+        return false;
+    }
+
+    @Override
+    public boolean unbindBusinessType(Long id) {
+        AccountingSubject subject = getById(id);
+        if (subject != null) {
+            subject.setBusinessType(null);
+            return updateById(subject);
+        }
+        return false;
+    }
+
+    @Override
+    public AccountingSubject getByBusinessType(String businessType) {
+        return accountingSubjectMapper.selectOne(
+            new com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper<AccountingSubject>()
+                .eq(AccountingSubject::getBusinessType, businessType)
+                .eq(AccountingSubject::getStatus, 1)
+        );
+    }
 }

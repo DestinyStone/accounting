@@ -2,6 +2,7 @@ package com.accounting.service.impl;
 
 import com.accounting.entity.JournalEntry;
 import com.accounting.entity.JournalEntryDetail;
+import com.accounting.mapper.AccountingSubjectMapper;
 import com.accounting.mapper.JournalEntryDetailMapper;
 import com.accounting.mapper.JournalEntryMapper;
 import com.accounting.service.JournalEntryService;
@@ -11,7 +12,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -23,6 +26,9 @@ public class JournalEntryServiceImpl extends ServiceImpl<JournalEntryMapper, Jou
     
     @Autowired
     private JournalEntryDetailMapper journalEntryDetailMapper;
+    
+    @Autowired
+    private AccountingSubjectMapper accountingSubjectMapper;
 
     @Override
     @Transactional
@@ -99,5 +105,43 @@ public class JournalEntryServiceImpl extends ServiceImpl<JournalEntryMapper, Jou
         // 提取序号部分并加1
         int seq = Integer.parseInt(maxNo.substring(9)) + 1;
         return "V" + dateStr + String.format("%03d", seq);
+    }
+    
+    @Override
+    public List<Map<String, Object>> getDetailsWithSubject(Long entryId) {
+        List<JournalEntryDetail> details = journalEntryDetailMapper.selectList(
+            new com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper<JournalEntryDetail>()
+                .eq(JournalEntryDetail::getEntryId, entryId)
+        );
+        
+        List<Map<String, Object>> result = new ArrayList<>();
+        for (JournalEntryDetail detail : details) {
+            Map<String, Object> map = new HashMap<>();
+            map.put("id", detail.getId());
+            map.put("entryId", detail.getEntryId());
+            map.put("subjectId", detail.getSubjectId());
+            map.put("debitAmount", detail.getDebitAmount());
+            map.put("creditAmount", detail.getCreditAmount());
+            map.put("remark", detail.getRemark());
+            
+            // 查询科目信息
+            if (detail.getSubjectId() != null) {
+                com.accounting.entity.AccountingSubject subject = accountingSubjectMapper.selectById(detail.getSubjectId());
+                if (subject != null) {
+                    map.put("subjectCode", subject.getCode());
+                    map.put("subjectName", subject.getName());
+                } else {
+                    map.put("subjectCode", "");
+                    map.put("subjectName", "");
+                }
+            } else {
+                map.put("subjectCode", "");
+                map.put("subjectName", "");
+            }
+            
+            result.add(map);
+        }
+        
+        return result;
     }
 }

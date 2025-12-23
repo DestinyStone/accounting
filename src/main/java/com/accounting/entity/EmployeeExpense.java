@@ -24,7 +24,7 @@ public class EmployeeExpense {
     private Long id;
 
     /**
-     * 费用编号
+     * 费用单号
      */
     private String expenseNo;
 
@@ -39,12 +39,17 @@ public class EmployeeExpense {
     private BigDecimal amount;
 
     /**
-     * 费用描述
+     * 费用类型（薪资发放、费用报销、员工补贴等）
+     */
+    private String expenseType;
+
+    /**
+     * 费用说明
      */
     private String remark;
 
     /**
-     * 状态：0-待审批，1-已批准，2-已报销
+     * 状态：0-未支付，1-已支付
      */
     private Integer status;
 
@@ -52,4 +57,19 @@ public class EmployeeExpense {
      * 费用发生日期
      */
     private Date expenseDate;
+    
+    /**
+     * 关联的凭证ID（报销后自动生成）
+     */
+    private Long journalEntryId;
+    
+    /**
+     * 费用类型科目ID（管理费用、销售费用等）
+     */
+    private Long expenseSubjectId;
+    
+    /**
+     * 付款账户科目ID（银行存款等）
+     */
+    private Long paymentAccountId;
 }

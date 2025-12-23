@@ -47,4 +47,9 @@ public class AccountingSubject {
      * 状态(0:禁用,1:启用)
      */
     private Integer status;
+    
+    /**
+     * 业务绑定类型（PURCHASE-采购单，SALES-销售单，EXPENSE-员工费用，TAX-税务处理）
+     */
+    private String businessType;
 }

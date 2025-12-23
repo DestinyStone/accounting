@@ -11,8 +11,12 @@ public interface EmployeeExpenseService {
 
     /**
      * 分页查询费用列表
+     * @param pageNum 页码
+     * @param pageSize 每页大小
+     * @param expenseType 费用类型（薪资发放、费用报销、员工补贴等）
+     * @param status 状态（0-未支付，1-已支付）
      */
-    IPage<EmployeeExpense> page(Integer pageNum, Integer pageSize, String expenseName, Integer status);
+    IPage<EmployeeExpense> page(Integer pageNum, Integer pageSize, String expenseType, Integer status);
 
     /**
      * 根据ID查询费用

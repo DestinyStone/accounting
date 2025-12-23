@@ -25,9 +25,9 @@ public class EmployeeExpenseController {
     @GetMapping("/list")
     public Result list(@RequestParam(defaultValue = "1") Integer pageNum,
                       @RequestParam(defaultValue = "10") Integer pageSize,
-                      String expenseName,
+                      String expenseType,
                       Integer status) {
-        IPage<EmployeeExpense> page = employeeExpenseService.page(pageNum, pageSize, expenseName, status);
+        IPage<EmployeeExpense> page = employeeExpenseService.page(pageNum, pageSize, expenseType, status);
         return Result.success(page);
     }
 
@@ -97,11 +97,18 @@ public class EmployeeExpenseController {
      */
     @PutMapping("/approve/{id}")
     public Result approve(@PathVariable Long id) {
-        boolean success = employeeExpenseService.approve(id);
-        if (success) {
-            return Result.success("报销成功");
-        } else {
-            return Result.error("报销失败");
+        try {
+            boolean success = employeeExpenseService.approve(id);
+            if (success) {
+                return Result.success("支付成功");
+            } else {
+                return Result.error("支付失败");
+            }
+        } catch (RuntimeException e) {
+            return Result.error(e.getMessage() != null ? e.getMessage() : "支付失败：" + e.getClass().getSimpleName());
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Result.error("支付失败：" + e.getMessage());
         }
     }
 

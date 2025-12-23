@@ -44,12 +44,47 @@ public class SalesOrder {
     private BigDecimal totalAmount;
 
     /**
-     * 订单状态（0：草稿 1：已提交 2：已审核 3：已完成 4：已取消）
+     * 订单状态：0-待审核 1-已审核 2-已过账 3-已取消
      */
     private Integer status;
+    
+    /**
+     * 税额（销项税，增值税）
+     */
+    private BigDecimal taxAmount;
+    
+    /**
+     * 税率（如13%）
+     */
+    private BigDecimal taxRate;
+    
+    /**
+     * 不含税金额
+     */
+    private BigDecimal amountWithoutTax;
 
     /**
      * 备注
      */
     private String remark;
+    
+    /**
+     * 关联的凭证ID（审核后自动生成）
+     */
+    private Long journalEntryId;
+    
+    /**
+     * 公司ID
+     */
+    private Long companyId;
+    
+    /**
+     * 收款方式（1-现金，2-银行转账，3-应收账款）
+     */
+    private Integer paymentMethod;
+    
+    /**
+     * 收款账户科目ID（银行存款等）
+     */
+    private Long paymentAccountId;
 }

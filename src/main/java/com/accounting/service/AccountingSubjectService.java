@@ -56,4 +56,26 @@ public interface AccountingSubjectService extends IService<AccountingSubject> {
      * @return 末级科目列表
      */
     List<AccountingSubject> getEnabledLeafSubjects();
+    
+    /**
+     * 绑定科目到业务类型
+     * @param id 科目ID
+     * @param businessType 业务类型（PURCHASE-采购单，SALES-销售单，EXPENSE-员工费用，TAX-税务处理）
+     * @return 是否成功
+     */
+    boolean bindBusinessType(Long id, String businessType);
+    
+    /**
+     * 取消科目绑定
+     * @param id 科目ID
+     * @return 是否成功
+     */
+    boolean unbindBusinessType(Long id);
+    
+    /**
+     * 根据业务类型获取绑定的科目
+     * @param businessType 业务类型
+     * @return 绑定的科目，如果不存在则返回null
+     */
+    AccountingSubject getByBusinessType(String businessType);
 }

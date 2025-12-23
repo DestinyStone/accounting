@@ -44,6 +44,22 @@ public class PurchaseOrderController {
     }
 
     /**
+     * 根据ID查询采购订单
+     */
+    @GetMapping("/{id}")
+    public Result getById(@PathVariable Long id) {
+        try {
+            PurchaseOrder order = purchaseOrderService.selectById(id);
+            if (order == null) {
+                return Result.error("采购订单不存在");
+            }
+            return Result.success(order);
+        } catch (Exception e) {
+            return Result.error("查询采购订单失败：" + e.getMessage());
+        }
+    }
+
+    /**
      * 新增采购订单
      */
     @PostMapping

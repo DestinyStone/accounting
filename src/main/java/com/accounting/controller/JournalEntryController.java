@@ -65,37 +65,8 @@ public class JournalEntryController {
         }
     }
 
-    /**
-     * 保存凭证分录
-     * 
-     * @param journalEntry 凭证分录对象
-     * @return 保存结果
-     */
-    @PostMapping
-    public Response save(@RequestBody JournalEntry journalEntry) {
-        try {
-            JournalEntry saved = journalEntryService.saveEntry(journalEntry);
-            return Response.success(saved);
-        } catch (Exception e) {
-            return Response.error(e.getMessage());
-        }
-    }
-
-    /**
-     * 更新凭证分录
-     * 
-     * @param journalEntry 凭证分录对象
-     * @return 更新结果
-     */
-    @PutMapping
-    public Response update(@RequestBody JournalEntry journalEntry) {
-        try {
-            JournalEntry updated = journalEntryService.updateEntry(journalEntry);
-            return Response.success(updated);
-        } catch (Exception e) {
-            return Response.error(e.getMessage());
-        }
-    }
+    // 已移除：手动新增凭证功能（凭证只能通过业务单据自动生成）
+    // 已移除：手动更新凭证功能（已生成的凭证不允许修改，如需修改请通过业务单据）
 
     /**
      * 根据ID查询凭证分录（包含明细）
@@ -121,28 +92,40 @@ public class JournalEntryController {
     }
 
     /**
-     * 根据凭证分录ID查询明细列表
+     * 根据凭证分录ID查询明细列表（包含科目信息）
      * 
      * @param id 凭证分录ID
-     * @return 明细列表
+     * @return 明细列表（包含科目编码和科目名称）
      */
     @GetMapping("/detail/{id}")
     public Response detail(@PathVariable Long id) {
-
-        LambdaQueryWrapper<JournalEntryDetail> wrapper = new LambdaQueryWrapper<>();
-        wrapper.eq(JournalEntryDetail::getEntryId, id);
-        return Response.success(detailMapper.selectList(wrapper));
+        return Response.success(journalEntryService.getDetailsWithSubject(id));
     }
 
     /**
-     * 删除凭证分录
+     * 删除凭证分录（仅允许删除草稿状态且未关联业务的凭证）
      * 
      * @param id 凭证分录ID
      * @return 删除结果
      */
     @DeleteMapping("/{id}")
     public Response delete(@PathVariable Long id) {
-        return Response.success(journalEntryService.deleteEntry(id));
+        try {
+            JournalEntry entry = journalEntryService.getById(id);
+            if (entry == null) {
+                return Response.error("凭证不存在");
+            }
+            // 只允许删除草稿状态且未关联业务的凭证
+            if (entry.getStatus() != 0) {
+                return Response.error("只能删除草稿状态的凭证");
+            }
+            if (entry.getBusinessId() != null) {
+                return Response.error("已关联业务的凭证不能删除，请通过业务单据操作");
+            }
+            return Response.success(journalEntryService.deleteEntry(id));
+        } catch (Exception e) {
+            return Response.error("删除失败：" + e.getMessage());
+        }
     }
 
     /**
